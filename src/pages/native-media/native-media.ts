@@ -6,7 +6,7 @@
  * @Last modified time: 11-09-2017
 */
 
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { Media } from '@ionic-native/media';
 import { WaveFormComponent} from "../../components/wave-form/wave-form";

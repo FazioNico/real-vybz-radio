@@ -1,8 +1,8 @@
 {
   "name": "real-vybz-radio",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "author": "Nicolas Fazio",
+  "homepage": "http://nicolasfazio.ch/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "4.1.3",
     "@ionic-native/background-mode": "^4.2.1",
     "@ionic-native/core": "3.12.1",
+    "@ionic-native/google-analytics": "^4.2.1",
     "@ionic-native/media": "^4.2.1",
     "@ionic-native/splash-screen": "3.12.1",
     "@ionic-native/status-bar": "3.12.1",
@@ -36,5 +37,5 @@
     "@ionic/app-scripts": "2.1.4",
     "typescript": "2.3.4"
   },
-  "description": "An Ionic project"
+  "description": "Listen to Real Vybz Radio Reggae - Dancehall - Dub Music Station Kill Babylon Sound - Little Lion Sound - Bamajo Sound Real Vybz - Real Music"
 }
