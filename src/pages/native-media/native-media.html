@@ -13,35 +13,52 @@ Ionic pages and navigation.
         <img src="./assets/imgs/logo-real-vybz-radio.png" alt="Real Vybz Radio">
       </div>
 
-      <div class="controle">
-        <button ion-fab  color="dark" (click)="controle()">
-          <ion-icon name="{{(!isPlaying?'play':'pause')}}"></ion-icon>
-        </button>
+      <div *ngIf="(audioState|async); let state;else noState">
+
+        <!-- <pre>
+          {{state|json}}
+        </pre>         -->
+
+        <div class="controle">
+          <button
+            *ngIf="state.ready; else notReady"
+            ion-fab
+            color="dark"
+            (click)="controle(state.playing)">
+            <ion-icon name="{{(!state.play?'play':'pause')}}"></ion-icon>
+          </button>
+          <ng-template #notReady>
+              <ion-spinner name="bubbles"></ion-spinner>
+          </ng-template>
+        </div>
+
+        <ngzio-waveform
+          #ngzioWave
+          [isPlaying]="state.playing"
+          [maxWidth]="2"
+          [maxHeight]="100"
+          [spaceing]="1"
+          [peakColor]="'34,34,34'"
+          [backgroundColor]="'34,34,34'"
+          [loadingTXT]="(state.ready)?'Click play to start live streaming': 'Audio Stream loading...'"></ngzio-waveform>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <img class="thumb" src="./assets/imgs/killbabylon_logo.png" alt="Kill Babylon Sound">
+            </ion-col>
+            <ion-col>
+              <img class="thumb" src="./assets/imgs/littlelion_logo.jpg" alt="Little Lion Sound">
+            </ion-col>
+            <ion-col>
+              <img class="thumb" src="./assets/imgs/bamajo_logo.png" alt="Bamajo Sound">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
-
-      <ngzio-waveform
-        #ngzioWave
-        [isPlaying]="isPlaying"
-        [maxWidth]="2"
-        [maxHeight]="100"
-        [spaceing]="1"
-        [peakColor]="'34,34,34'"
-        [backgroundColor]="'34,34,34'"
-        [loadingTXT]="'Click  play to start live streaming'"></ngzio-waveform>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <img class="thumb" src="./assets/imgs/killbabylon_logo.png" alt="Kill Babylon Sound">
-          </ion-col>
-          <ion-col>
-            <img class="thumb" src="./assets/imgs/littlelion_logo.jpg" alt="Little Lion Sound">
-          </ion-col>
-          <ion-col>
-            <img class="thumb" src="./assets/imgs/bamajo_logo.png" alt="Bamajo Sound">
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ng-template #noState>
+        <ion-spinner name="bubbles"></ion-spinner>
+      </ng-template>
 
     </div>
   </div>

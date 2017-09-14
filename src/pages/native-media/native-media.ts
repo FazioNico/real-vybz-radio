@@ -3,14 +3,22 @@
 * @Date:   10-08-2017
 * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 11-09-2017
+ * @Last modified time: 14-09-2017
 */
 
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { Media } from '@ionic-native/media';
+import { IonicPage, NavController, NavParams, Platform, AlertController, Alert } from 'ionic-angular';
+import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { WaveFormComponent} from "../../components/wave-form/wave-form";
 //import { MusicControls } from '@ionic-native/music-controls';
+
+import { HtmlAudioProvider } from '../../providers/html-audio/html-audio';
+import { NativeAudioProvider } from '../../providers/native-audio/native-audio';
+import { MediaObject } from '@ionic-native/media';
+
+import { IAppState, IError } from "../../app/app.state";
 
 /**
 * Generated class for the NativeMediaPage page.
@@ -31,48 +39,38 @@ export class NativeMediaPage {
 
   public url:string;
   public stream:any;
-  public isPlaying:boolean;
+  public audioState:Observable<IAppState>;
+  public alert:Alert|null;
+
   @ViewChild('ngzioWave') ngzioWave:WaveFormComponent
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public platform: Platform,
-    private media: Media,
+    private _htmlAudio:HtmlAudioProvider,
+    private _nativeAudio:NativeAudioProvider,
+    private _alertCtrl:AlertController
     //private musicControls: MusicControls
   ) {
 
     this.url = 'http://195.154.156.183/radio/67507/stream/105202';
-    this.isPlaying = false;
     this.platform.ready().then(_=> {
       if(this.platform.is('core') || this.platform.is('mobileweb')){
-        this.stream = new Audio(this.url);
-        // listen plugin events:
-        new Promise((resolve,reject) => {
-          this.stream.addEventListener('playing', () => {
-            resolve(true);
-          });
-          this.stream.addEventListener('error', () => {
-            reject(false);
-          });
-        })
-        .then(res => {console.log('playing->', res)})
-        .catch(err => {console.log('error->', err)})
+        this.useAudioHTML()
       }
       else {
-        this.stream = this.media.create(this.url);
-        // listen plugin events:
-        this.stream.onStatusUpdate.subscribe(status => console.log('onStatusUpdate-> ', status)); // fires when file status changes
-        this.stream.onSuccess.subscribe((result) => console.log('onSuccess-> Action is successful ', result));
-        this.stream.onError.subscribe(error => console.log('onError-> Error! ', error));
-        //this.initNativeMusicControl()
+        this.useAudioNativePlugin()
       }
+      this.audioState = this.audioState.map((state:IAppState)=> {
+        if(state.error[0]) this.displayError(state.error[0]) //console.log('Error alert->', state.error[0])
+        return state
+      })
     })
   }
 
-  controle():void{
-    this.isPlaying = !this.isPlaying
-    if(this.isPlaying){
+  controle(playing):void{
+    if(!playing){
       if(!this.ngzioWave.animationFrame){
         this.ngzioWave.drawWave()
       }
@@ -82,7 +80,39 @@ export class NativeMediaPage {
       this.stream.pause()
     }
   }
-  //
+
+  useAudioHTML():void{
+    this._htmlAudio.init(this.url)
+    this.audioState = this._htmlAudio.state//.subscribe(res=> console.log(res))
+    this.stream = this._htmlAudio
+  }
+
+  useAudioNativePlugin():void{
+    this._nativeAudio.init(this.url)
+    this.audioState = this._nativeAudio.state//.subscribe(res=> console.log(res))
+    this.stream = this._nativeAudio
+    //this.initNativeMusicControl()
+  }
+
+  displayError(err:IError):IError{
+    if(this.alert) return err;
+    this.alert = this._alertCtrl.create({
+      title: 'Error:',
+      subTitle: `${err.message}<hr/>Check your internet connection and try to restart application if audio is not working.`,
+      buttons: [
+        {
+          text: 'Dismiss',
+          role: 'cancel',
+          handler: () => {
+            this.alert = null
+          }
+        }
+      ]
+    });
+    this.alert.present();
+    return err
+  }
+
   // initNativeMusicControl(){
   //   this.musicControls.create({
   //     track       : 'Live Streaming',        // optional, default : ''

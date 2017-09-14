@@ -3,7 +3,7 @@
  * @Date:   30-05-2017
  * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 11-09-2017
+ * @Last modified time: 14-09-2017
  */
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -40,7 +40,9 @@ const ionicAppConfig:Object = {
     SplashScreen,
     BackgroundMode,
     GoogleAnalytics,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    //HtmlAudioProvider,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    //NativeAudioProvider
   ]
 })
 export class AppModule {}
