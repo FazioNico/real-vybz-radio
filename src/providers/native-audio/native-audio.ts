@@ -3,7 +3,7 @@
  * @Date:   13-09-2017
  * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 14-09-2017
+ * @Last modified time: 16-09-2017
  */
 
 import { Injectable } from '@angular/core';
@@ -122,10 +122,10 @@ export class NativeAudioProvider {
                     .catch(err => console.log('Error getCurrentPosition->', err))
   }
   pause(){
-    this._streamFile.stop()
+    this._streamFile.pause()
   }
   stop(){
-    this._streamFile.stop()
+    this._streamFile.pause()
   }
 
   // // state formater

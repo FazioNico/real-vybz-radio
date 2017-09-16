@@ -3,7 +3,7 @@
     <name>Real Vybz Radio</name>
     <description>Listen to Real Vybz Radio Reggae - Dancehall - Dub Music Station Kill Babylon Sound - Little Lion Sound - Bamajo Sound Real Vybz - Real Music</description>
     <author email="contact@nicolasfazio" href="http://nicolasfazio.ch/">Nicolas Fazio</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.1.107:8100" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-intent href="http://*/*" />
