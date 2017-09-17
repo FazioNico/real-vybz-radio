@@ -14,10 +14,10 @@ Ionic pages and navigation.
       </div>
 
       <div *ngIf="(audioState|async); let state;else noState">
-
+<!-- 
         <pre>
           {{state|json}}
-        </pre>
+        </pre> -->
 
         <div class="controle">
           <button
@@ -28,7 +28,12 @@ Ionic pages and navigation.
             <ion-icon name="{{(!state.play?'play':'pause')}}"></ion-icon>
           </button>
           <ng-template #notReady>
-              <ion-spinner name="bubbles"></ion-spinner>
+            <button
+              ion-fab
+              color="dark">
+              <ion-spinner color="light" name="bubbles"></ion-spinner>
+            </button>
+
           </ng-template>
         </div>
 

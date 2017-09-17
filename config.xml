@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="ch.nicolasfazio.real-vybz-radio" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="ch.nicolasfazio.real-vybz-radio" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Real Vybz Radio</name>
     <description>Listen to Real Vybz Radio Reggae - Dancehall - Dub Music Station Kill Babylon Sound - Little Lion Sound - Bamajo Sound Real Vybz - Real Music</description>
     <author email="contact@nicolasfazio" href="http://nicolasfazio.ch/">Nicolas Fazio</author>
-    <content original-src="index.html" src="http://192.168.1.107:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-intent href="http://*/*" />

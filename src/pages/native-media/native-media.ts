@@ -3,7 +3,7 @@
 * @Date:   10-08-2017
 * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 16-09-2017
+ * @Last modified time: 17-09-2017
 */
 
 import { Component, ViewChild } from '@angular/core';
@@ -60,7 +60,16 @@ export class NativeMediaPage {
         this.useAudioHTML()
       }
       else {
-        this.useAudioNativePlugin()
+        /**
+         * Bug Report:
+         * Cordova Native Plugin currently not working propely
+         * No state handling to manage audioState
+         * See issue: https://github.com/ionic-team/ionic-native/issues/1886
+         *
+         * Fix by using Audio HTML5 API to load & play audio in IOS and Android
+         */
+        //this.useAudioNativePlugin()
+        this.useAudioHTML()
       }
       this.audioState = this.audioState.map((state:IAppState)=> {
         if(state.error[0]) this.displayError(state.error[0]) //console.log('Error alert->', state.error[0])

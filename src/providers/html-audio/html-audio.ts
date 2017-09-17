@@ -3,7 +3,7 @@
 * @Date:   13-09-2017
 * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 14-09-2017
+ * @Last modified time: 17-09-2017
 */
 
 import { Injectable } from '@angular/core';
@@ -55,15 +55,15 @@ export class HtmlAudioProvider {
   private _streamFile:HTMLAudioElement;
   private _state:IAppState;
   public state: Observable<IAppState>;
-  public events:IHtmlEvents;
-  public eventNames:string[];
+  // public events:IHtmlEvents;
+  // public eventNames:string[];
 
   constructor() {
-    this.events = initialEventState;
-    this.eventNames = [
-      'ready','canplay', 'play', 'pause', 'ended', 'error',
-      'timeupdate', 'progress', 'seeking', 'seeked', 'loadedMetaData', 'waiting'
-    ];
+    //this.events = initialEventState;
+    // this.eventNames = [
+    //   'ready','canplay', 'play', 'pause', 'ended', 'error',
+    //   'timeupdate', 'progress', 'seeking', 'seeked', 'loadedMetaData', 'waiting'
+    // ];
 
     this._state = {
       src: new BehaviorSubject(''),
@@ -78,69 +78,51 @@ export class HtmlAudioProvider {
     }
     this.state = combineStates(this._state)
   }
+  init(url) {
+      this._streamFile = new Audio(url)
+      console.log('_streamFile->', this._streamFile)
+      //this._streamFile.play();
 
-  init(url){
-    this._streamFile = new Audio(url);
-    this._state.src.next(url)
-    //this._state.load.next(true)
-    this.eventNames.forEach((event:string) => {
-      this.events[event] = Observable.fromEvent(this._streamFile, event);
-    });
-
-    // listen audio events:
-    this.events.canplay.subscribe(
-      (res) => {
-        //console.log('canplay', res)
+      // Handling Audio Events:
+      // 1st event
+      this._streamFile.addEventListener('loadstart', () => {
         this._state.ready.next(true)
-        this._state.loading.next(false)
-        //this._state.load.next(false)
-      },
-      err => this.onError(err)
-    );
-    this.events.play.subscribe(
-      (res) => {
-        //console.log('play', res)
+        console.log('1: loadstart')
+      });
+      // 2th event (already handling on playing audio)
+      this._streamFile.addEventListener('progress', () => {
+        this._state.ready.next(true)
+        console.log('2: progress...')
+      });
+      // 3th event
+      this._streamFile.addEventListener('waiting', () => {
+        this._state.ready.next(false)
+        this._state.playing.next(false)
+        console.log('3: waiting')
+      });
+      // 4th event
+      this._streamFile.addEventListener('canplay', () => {
+        this._state.ready.next(true)
+        console.log('4: canplay')
+      });
+      // 5th event
+      this._streamFile.addEventListener('playing', () => {
         this._state.play.next(true)
         this._state.playing.next(true)
-        this._state.loading.next(true)
         this._state.pause.next(false)
-      },
-      err => this.onError(err)
-    );
-    this.events.pause.subscribe(
-      (res) => {
-        //console.log('pause', res)
+        console.log('5: playing')
+      });
+      // pause event
+      this._streamFile.addEventListener('pause', () => {
         this._state.play.next(false)
         this._state.playing.next(false)
         this._state.pause.next(true)
-      },
-      err => this.onError(err)
-    );
-    this.events.waiting.subscribe(
-      (res) => {
-        //console.log('waiting', res)
-        this.stop()
-        this._state.ready.next(false)
-        this._state.play.next(false)
-        this._state.playing.next(false)
-        this._state.loading.next(false)
-        this._state.pause.next(true)
-        this._state.error.next([
-          {
-            type:'Network',
-            message: 'Network connection loast... waiting... audio load again...'}
-        ])
-        //this._state.load.next(false)
-      },
-      err => this.onError(err)
-    );
-    this.events.error.subscribe(
-      (err) => {
-        console.log('error', err)
-        this.onError(err)
-      },
-      err => alert(err)
-    );
+        console.log('pause')
+      });
+      // error event
+      this._streamFile.addEventListener('error', () => {
+        this.onErrorHTMLAPI()
+      });
 
   }
 
@@ -160,6 +142,35 @@ export class HtmlAudioProvider {
     return err
   }
 
+  private onErrorHTMLAPI(){
+    console.log('onError', this._streamFile.error)
+    let err:number = this._streamFile.error.code
+    this._state.ready.next(false)
+    this._state.play.next(false)
+    this._state.playing.next(false)
+    this._state.pause.next(true)
+    this._state.error.next([
+      {
+        type:'error',
+        message: this.extractError(err)}
+    ])
+  }
+
+  private extractError(err){
+    switch(err) {
+      case 1:
+        return 'Aborded action'
+      case 2:
+        return 'Network connection loast... waiting... audio load again...'
+      case 3:
+          return 'Encoding source is not supported'
+      case 4:
+        return 'Media source format is not supported'
+      default:
+       return  'Unknow error with HTML Audio API'
+    }
+
+  }
   // controle methode
   play(){
     this._streamFile.play()
@@ -209,4 +220,71 @@ export class HtmlAudioProvider {
     //     ...values.map(e=>e)
     // )
   }
+
+
+    //// Not working with Native
+    // init(url){
+    //   this._streamFile = new Audio(url);
+    //   this._state.src.next(url)
+    //   //this._state.load.next(true)
+    //   this.eventNames.forEach((event:string) => {
+    //     this.events[event] = Observable.fromEvent(this._streamFile, event);
+    //   });
+    //
+    //   // listen audio events:
+    //   this.events.canplay.subscribe(
+    //     (res) => {
+    //       //console.log('canplay', res)
+    //       this._state.ready.next(true)
+    //       this._state.loading.next(false)
+    //       //this._state.load.next(false)
+    //     },
+    //     err => this.onError(err)
+    //   );
+    //   this.events.play.subscribe(
+    //     (res) => {
+    //       //console.log('play', res)
+    //       this._state.play.next(true)
+    //       this._state.playing.next(true)
+    //       this._state.loading.next(true)
+    //       this._state.pause.next(false)
+    //     },
+    //     err => this.onError(err)
+    //   );
+    //   this.events.pause.subscribe(
+    //     (res) => {
+    //       //console.log('pause', res)
+    //       this._state.play.next(false)
+    //       this._state.playing.next(false)
+    //       this._state.pause.next(true)
+    //     },
+    //     err => this.onError(err)
+    //   );
+    //   this.events.waiting.subscribe(
+    //     (res) => {
+    //       //console.log('waiting', res)
+    //       this.stop()
+    //       this._state.ready.next(false)
+    //       this._state.play.next(false)
+    //       this._state.playing.next(false)
+    //       this._state.loading.next(false)
+    //       this._state.pause.next(true)
+    //       this._state.error.next([
+    //         {
+    //           type:'Network',
+    //           message: 'Network connection loast... waiting... audio load again...'}
+    //       ])
+    //       //this._state.load.next(false)
+    //     },
+    //     err => this.onError(err)
+    //   );
+    //   this.events.error.subscribe(
+    //     (err) => {
+    //       console.log('error', err)
+    //       this.onError(err)
+    //     },
+    //     err => alert(err)
+    //   );
+    //
+    // }
 }
