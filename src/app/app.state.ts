@@ -3,7 +3,7 @@
 * @Date:   13-09-2017
 * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 14-09-2017
+ * @Last modified time: 01-11-2017
 */
 
 import { Observable, AsyncSubject, ReplaySubject, Subject} from 'rxjs';
@@ -27,7 +27,7 @@ export interface IError extends Object {
 }
 
 export function combineStates(_state:IAppState):Observable<IAppState>{
-  console.log(_state)
+  // console.log(_state)
   // let keys = []
   // let values = []
   // for (let key in _state) {

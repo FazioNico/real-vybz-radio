@@ -3,7 +3,7 @@
 * @Date:   13-09-2017
 * @Email:  contact@nicolasfazio.ch
  * @Last modified by:   webmaster-fazio
- * @Last modified time: 17-09-2017
+ * @Last modified time: 01-11-2017
 */
 
 import { Injectable } from '@angular/core';
@@ -80,44 +80,44 @@ export class HtmlAudioProvider {
   }
   init(url) {
       this._streamFile = new Audio(url)
-      console.log('_streamFile->', this._streamFile)
+      // console.log('_streamFile->', this._streamFile)
       //this._streamFile.play();
 
       // Handling Audio Events:
       // 1st event
       this._streamFile.addEventListener('loadstart', () => {
         this._state.ready.next(true)
-        console.log('1: loadstart')
+        //console.log('1: loadstart')
       });
       // 2th event (already handling on playing audio)
       this._streamFile.addEventListener('progress', () => {
         this._state.ready.next(true)
-        console.log('2: progress...')
+        //console.log('2: progress...')
       });
       // 3th event
       this._streamFile.addEventListener('waiting', () => {
         this._state.ready.next(false)
         this._state.playing.next(false)
-        console.log('3: waiting')
+        //console.log('3: waiting')
       });
       // 4th event
       this._streamFile.addEventListener('canplay', () => {
         this._state.ready.next(true)
-        console.log('4: canplay')
+        //console.log('4: canplay')
       });
       // 5th event
       this._streamFile.addEventListener('playing', () => {
         this._state.play.next(true)
         this._state.playing.next(true)
         this._state.pause.next(false)
-        console.log('5: playing')
+        //console.log('5: playing')
       });
       // pause event
       this._streamFile.addEventListener('pause', () => {
         this._state.play.next(false)
         this._state.playing.next(false)
         this._state.pause.next(true)
-        console.log('pause')
+        //console.log('pause')
       });
       // error event
       this._streamFile.addEventListener('error', () => {
