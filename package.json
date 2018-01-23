@@ -31,11 +31,19 @@
     "ionicons": "3.0.0",
     "rxjs": "5.4.0",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.12"
+    "zone.js": "0.8.12",
+    "cordova-ios": "~4.3.1",
+    "cordova-android": "~6.1.2"
   },
   "devDependencies": {
     "@ionic/app-scripts": "2.1.4",
     "typescript": "2.3.4"
   },
-  "description": "Listen to Real Vybz Radio Reggae - Dancehall - Dub Music Station Kill Babylon Sound - Little Lion Sound - Bamajo Sound Real Vybz - Real Music"
+  "description": "Listen to Real Vybz Radio Reggae - Dancehall - Dub Music Station Kill Babylon Sound - Little Lion Sound - Bamajo Sound Real Vybz - Real Music",
+  "cordova": {
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
 }

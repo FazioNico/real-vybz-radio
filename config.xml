@@ -86,7 +86,7 @@
     <plugin name="cordova-plugin-media" spec="~3.0.1" />
     <plugin name="cordova-plugin-background-mode" spec="~0.7.2" />
     <plugin name="cordova-plugin-google-analytics" spec="~1.8.3" />
-    <engine name="ios" spec="~4.3.1" />
     <allow-navigation href="http://192.168.1.107:8100" />
+    <engine name="ios" spec="~4.3.1" />
     <engine name="android" spec="~6.1.2" />
 </widget>

@@ -54,7 +54,7 @@ export class NativeMediaPage {
     //private musicControls: MusicControls
   ) {
 
-    this.url = 'http://195.154.156.183/radio/67507/stream/105202';
+    this.url = 'https://www.radioking.com/play/real-vybz'//'http://195.154.156.183/radio/67507/stream/105202';
     this.platform.ready().then(_=> {
       if(this.platform.is('core') || this.platform.is('mobileweb')){
         this.useAudioHTML()
